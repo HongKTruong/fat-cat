@@ -1,0 +1,25 @@
+{
+  "name": "FatCat",
+  "version": "0.0.1",
+  "description": "A Discord bot that reposts a larger version of any posted custom emotes. Node.js built on Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "discord.js": "^11.4.2"
+  },
+  "engines": {
+    "node": "8.9.3"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/hello-express"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "express"
+  ]
+}
