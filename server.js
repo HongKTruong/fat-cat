@@ -35,23 +35,52 @@ client.on("message", (message) => {
   // Get each space-separated word without the prefix
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
 
-  // Post the all the large emojis if it exists
+  // Post all the large emojis if it exists
   args.forEach(function(arg) {
-    // Get the emoji name from the emoji code: `<:name:identifier>`
-    const emojiName = arg.substring(
-      arg.indexOf(":") + 1,
-      arg.lastIndexOf(":")
-    );
+    sendFatEmoji(arg, message);
+  });
+});
 
-    // If the client has this emoji, post it as a large attachment
-    const hasEmoji = client.emojis.some(em => em.name === emojiName);
-    if (hasEmoji) {
-      const url = client.emojis.find(em => em.name === emojiName).url;
-      const attachment = new Attachment(url);
-      message.channel.send(attachment);
+
+client.on("messageUpdate", (oldMsg, newMsg) => {
+  // Ignore message if it doesnt start with the prefix
+  if (!newMsg.content.startsWith(config.prefix)) return;
+
+  // Get each space-separated word without the prefix
+  const args = newMsg.content.slice(config.prefix.length).trim().split(/ +/g);
+  const oldArgs = oldMsg.content.slice(config.prefix.length).trim().split(/ +/g);
+  var index = 0;
+  
+  args.forEach(function(arg) {
+    if (index >= oldArgs.length) {
+      // Post any newly added emojis
+      sendFatEmoji(arg, newMsg);
+    }
+    else {
+      // Don't repost already posted emojis
+      const oldArg = oldArgs[index]
+      if (arg !== oldArg) {
+        sendFatEmoji(arg, newMsg);
+      }
+      index++;
     }
   });
 });
 
 client.login(process.env.TOKEN);
 
+function sendFatEmoji(arg, message) {
+  // Get the emoji name from the emoji code: `<:name:identifier>`
+  const emojiName = arg.substring(
+    arg.indexOf(":") + 1,
+    arg.lastIndexOf(":")
+  );
+
+  // If the client has this emoji, post it as a large attachment
+  const hasEmoji = client.emojis.some(em => em.name === emojiName);
+  if (hasEmoji) {
+    const url = client.emojis.find(em => em.name === emojiName).url;
+    const attachment = new Attachment(url);
+    message.channel.send(attachment);
+  }
+}
