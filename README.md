@@ -1,15 +1,18 @@
 # Fat Cat
-Fat Cat is a Node.js Discord bot that reposts bigger (fatter) versions of
-custom emojis. It is hosted on [Glitch](http://glitch.com) 24/7 using [Uptime Robot](https://uptimerobot.com).
+Fat Cat is a Node.js Discord bot whose main purpose is to repost bigger (fatter) versions of
+custom emojis. It also allows custom commands to be added with a corresponding word or link. It is hosted on [Glitch](http://glitch.com) 24/7 using [Uptime Robot](https://uptimerobot.com).
 
 # How to Use
-## Fatten Up Those Emojis
+To see what Fat Cat is capable of, type `!help`.
+
+## The Main Dish: Bigger and Better Custom Emojis
+### Fatten Up Those Emojis
 Start your message with `!` followed by the emoji. For example, if you have an 
 emoji called `thicc`, type one of the following:
 * `! :thicc:`
 * `!:thicc:`
 
-## Fatten Up Multiple Emojis
+### Fatten Up Multiple Emojis
 Fat Cat can also scan your message for multiple emojis at the price of one message!
 
     `! :thicc: ignoreme :thicc:`
@@ -17,6 +20,13 @@ Fat Cat can also scan your message for multiple emojis at the price of one messa
 Fat Cat will post the first emoji, followed by the second emoji in a new post.
 It ignores any text that is not an emoji. Just make sure the emojis are separated
 by spaces.
+
+## Some Side Dishes
+- `add <command> <link>` will save the custom command and corresponding link to Fat
+Cat's memory
+- `delete <command>` will delete the custom command
+- `<command>` causes Fat Cat to post the `<link>` associated with the command
+- `<commands>` lists all the custom commands known to Fat Cat
 
 ## Secret Catnip
 Fat Cat will actually post any custom emoji you have on your client. So if you
