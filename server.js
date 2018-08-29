@@ -42,7 +42,8 @@ client.on("message", (message) => {
     // Post a list of all usable commands
     message.channel.send("**These are the tricks that I can do:**\n" +
                          "- `!add <command> <link>` - to add a new link for me to post\n" +
-                         "- `!delete <command>` - to remove a link from my memory\n" +
+                         "- `!delete <command1> <command2>...` - to remove link(s) from my memory\n" +
+                         "- `!rename <command1> <command2>` - renames a custom command from command1 to command2" +
                          "- `!commands` - to get a list of all the custom commands that I know\n" +
                          "- `!:customEmote:` - to post a fatter version of the emote\n");
   }
@@ -73,20 +74,45 @@ client.on("message", (message) => {
       message.channel.send("**I grow fatter with every new link.**");
     }
   }
-  else if (command === "delete" && args.length === 2) {
-    // Deletes a custom command
-    const key = args[1];
-    const link = args[2];
+  else if (command === "delete" && args.length >= 2) {
+    // Deletes 1 or more custom command
+    args.shift(); // Remove "delete" from the list of commands
     
-    if (key in commands) {
-      delete commands[key];
+    args.forEach(async function(key) {
+      try {
+        if (key in commands) {
+          delete commands[key];
+          await message.channel.send("**Losing weight by throwing out **`" + key + "`**...**");
+        }
+        else {
+          await message.channel.send("**I don't own a utensil called **`" + key + "`**...**");
+        }
+      }
+      catch (e) {
+        console.error(e);
+      }
+    });
+    fs.writeFile("./commands.json", JSON.stringify(commands), (err) => {
+      if (err) console.error(err)
+    });
+    message.channel.send("**Optimal weight reached.**");
+  }
+  else if (command === "rename" && args.length === 3) {
+    const oldCommand = args[1];
+    const newCommand = args[2];
+    
+    if (oldCommand in commands) {
+      const link = commands[oldCommand];
+      delete commands[oldCommand];
+      commands[newCommand] = link;
+      
       fs.writeFile("./commands.json", JSON.stringify(commands), (err) => {
         if (err) console.error(err)
       });
-      message.channel.send("**Losing weight...**");
+      message.channel.send("**Switching out utensils...**");
     }
     else {
-      message.channel.send("**I've never tasted this before...**");
+      message.channel.send("**I don't own a utensil called " + oldCommand + "...**"); 
     }
   }
   else if (command in commands) {
@@ -129,9 +155,10 @@ client.on("messageUpdate", (oldMsg, newMsg) => {
 
 client.login(process.env.TOKEN);
 
-const petResponses = ["no", "blush~1", "ow", "heart~1", "squee"];
+const petResponses = ["no", "satisfied", "ow", "squee"];
 
-function sendFatEmoji(arg, message) {
+// Using async/await so I can send messages in order
+async function sendFatEmoji(arg, message) {
   // Get the emoji name from the emoji code: `<:name:identifier>`
   const emojiName = arg.substring(
     arg.indexOf(":") + 1,
@@ -143,6 +170,18 @@ function sendFatEmoji(arg, message) {
   if (hasEmoji) {
     const url = client.emojis.find(em => em.name === emojiName).url;
     const attachment = new Attachment(url);
-    message.channel.send(attachment);
+    
+    try {
+      await message.channel.send(attachment);
+
+      // Super secret pets
+      if (message.author.tag === process.env.SECRET_USER && emojiName === "pet") {
+        const choice = Math.floor(Math.random() * 5);
+        const choiceAttachment = new Attachment(client.emojis.find(em => em.name === petResponses[choice]).url);
+        await message.channel.send(choiceAttachment);
+      }
+    } catch (e) {
+      console.error(e); 
+    }
   }
 }
