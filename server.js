@@ -26,6 +26,10 @@ const config = require("./config.json");
 const fs = require("fs");
 var commands = JSON.parse(fs.readFileSync("./commands.json", "utf8"));
 
+const food = ["\:ramen:", "\:spaghetti:", "\:stew:", "\:curry:", "\:sushi:",
+              "\:bento:", "\:icecream:", "\:cake:", "\:pancakes:", "\:flan:",
+              "\:beers:", "\:tropical_drink:", "\:sake:"];
+
 client.on("ready", () => {
   console.log("I am ready!");
 });
@@ -43,7 +47,8 @@ client.on("message", (message) => {
     message.channel.send("**These are the tricks that I can do:**\n" +
                          "- `!add <command> <link>` - to add a new link for me to post\n" +
                          "- `!delete <command1> <command2>...` - to remove link(s) from my memory\n" +
-                         "- `!rename <command1> <command2>` - renames a custom command from command1 to command2" +
+                         "- `!rename <command1> <command2>` - renames a custom command from command1 to command2\n" +
+                         "- `!edit <command> <new_link>` - replaces the link for an existing command\n" +
                          "- `!commands` - to get a list of all the custom commands that I know\n" +
                          "- `!:customEmote:` - to post a fatter version of the emote\n");
   }
@@ -63,7 +68,7 @@ client.on("message", (message) => {
     const link = args[2];
     
     if (key in commands) {
-      message.channel.send("**I've eaten this already...**");
+      message.channel.send("**\:no_entry_sign: I've eaten this already...**");
     }
     else {
       // Save the command and its link to the JSON  
@@ -71,7 +76,8 @@ client.on("message", (message) => {
       fs.writeFile("./commands.json", JSON.stringify(commands), (err) => {
         if (err) console.error(err)
       });
-      message.channel.send("**I grow fatter with every new link.**");
+      const choice = Math.floor(Math.random() * food.length);
+      message.channel.send("**Mmm...tasty " + food[choice] + "...I can feel myself getting fatter!**");
     }
   }
   else if (command === "delete" && args.length >= 2) {
@@ -82,10 +88,10 @@ client.on("message", (message) => {
       try {
         if (key in commands) {
           delete commands[key];
-          await message.channel.send("**Losing weight by throwing out **`" + key + "`**...**");
+          await message.channel.send("**\:balloon: Losing weight by throwing out **`" + key + "`**...**");
         }
         else {
-          await message.channel.send("**I don't own a utensil called **`" + key + "`**...**");
+          await message.channel.send("**\:warning: I don't own a utensil called **`" + key + "`**...**");
         }
       }
       catch (e) {
@@ -95,24 +101,47 @@ client.on("message", (message) => {
     fs.writeFile("./commands.json", JSON.stringify(commands), (err) => {
       if (err) console.error(err)
     });
-    message.channel.send("**Optimal weight reached.**");
+    message.channel.send("**\:white_check_mark: Optimal weight reached.**");
   }
   else if (command === "rename" && args.length === 3) {
+    // Rename a custom command
     const oldCommand = args[1];
     const newCommand = args[2];
     
     if (oldCommand in commands) {
-      const link = commands[oldCommand];
-      delete commands[oldCommand];
-      commands[newCommand] = link;
-      
+      if (newCommand in commands) {
+        message.channel.send("**\:no_entry_sign: I already own the utensil `" + newCommand + "`**"); 
+      }
+      else {
+        const link = commands[oldCommand];
+        delete commands[oldCommand];
+        commands[newCommand] = link;
+
+        fs.writeFile("./commands.json", JSON.stringify(commands), (err) => {
+          if (err) console.error(err)
+        });
+        message.channel.send("**\:white_check_mark: Utensils switched out**");
+      }
+    }
+    else {
+      message.channel.send("**\:warning: I don't own a utensil called " + oldCommand + "...**"); 
+    }
+  }
+  else if (command === "edit" && args.length === 3) {
+    // Replace the link associated with a command
+    const key = args[1];
+    const newLink = args[2];
+    
+    if (key in commands) {
+      commands[key] = newLink;
+
       fs.writeFile("./commands.json", JSON.stringify(commands), (err) => {
         if (err) console.error(err)
       });
-      message.channel.send("**Switching out utensils...**");
+      message.channel.send("**\:white_check_mark: **`" + key + "`** has a new link!**");
     }
     else {
-      message.channel.send("**I don't own a utensil called " + oldCommand + "...**"); 
+      message.channel.send("**\:warning: I don't own a utensil called " + key + "...**");
     }
   }
   else if (command in commands) {
@@ -176,7 +205,7 @@ async function sendFatEmoji(arg, message) {
 
       // Super secret pets
       if (message.author.tag === process.env.SECRET_USER && emojiName === "pet") {
-        const choice = Math.floor(Math.random() * 5);
+        const choice = Math.floor(Math.random() * petResponses.length);
         const choiceAttachment = new Attachment(client.emojis.find(em => em.name === petResponses[choice]).url);
         await message.channel.send(choiceAttachment);
       }
