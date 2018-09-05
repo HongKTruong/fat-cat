@@ -6,10 +6,16 @@ exports.run = (client, message, args) => {
   }
   
   const key = args[1];
-  const newLink = args[2];
+  const newLink = args[2];  
+  const guild = (message.guild.available) ? "-1" : message.guild.id;
   
   if (client.keywords.has(key)) {
-    client.keywords.set(key, newLink);
+    client.keywords.set(key, {
+      server: guild,
+      creator: message.author.id,
+      keyword: key,
+      content: newLink
+    });
     message.channel.send("**\:white_check_mark: **`" + key + "`** has a new link!**");
   }
   else {

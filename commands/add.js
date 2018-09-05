@@ -17,8 +17,14 @@ exports.run = (client, message, args) => {
     return message.channel.send("**\:no_entry_sign: I've eaten this already...**");
   }
   
-  // Save the command and its link
-  client.keywords.set(key, link);
+  // Save keyword with the link and message metadata
+  const guild = (message.guild.available) ? "-1" : message.guild.id;
+  client.keywords.set(key, {
+    server: guild,
+    creator: message.author.id,
+    keyword: key,
+    content: link
+  });
 
   // Send confirmation with a random food
   const choice = util.randomize(food);

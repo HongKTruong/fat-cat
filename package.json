@@ -7,11 +7,10 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.16.3",
+    "better-sqlite-pool": "^0.1.2",
     "discord.js": "^11.4.2",
     "enmap": "^4.0.12",
-    "windows-build-tools": "^3.1.0",
-    "better-sqlite-pool": "^0.1.2"
+    "express": "^4.16.3"
   },
   "engines": {
     "node": "8.9.3"
