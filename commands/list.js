@@ -5,5 +5,5 @@ exports.run = (client, message, []) => {
   Array.from(client.keywords.keys()).forEach(key => {
     list += "- `" + key + "`\n";
   });
-  message.channel.send(list); 
+  message.channel.send(list);
 }

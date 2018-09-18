@@ -9,10 +9,15 @@ const randomize = (choices) => {
 // Scan for emojis, grab their URLs, and post them as an attachment 
 const sendFatEmoji = async (client, message, arg) => {
   // Get the emoji name from the emoji code: `<:name:identifier>`
-  const emojiName = arg.substring(
+  var emojiName = arg.substring(
     arg.indexOf(":") + 1,
     arg.lastIndexOf(":")
   );
+  
+  // Remove "\" escape characters at the end
+  if (emojiName[emojiName.length-1] === "\\") {
+    emojiName = emojiName.substring(0, emojiName.length-1);
+  }
   
   // If the client has this emoji, post it as a large attachment
   const customEmoji = client.emojis.find(em => em.name === emojiName)
