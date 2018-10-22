@@ -13,6 +13,10 @@ exports.run = (client, message, args) => {
               "\:bento:", "\:icecream:", "\:cake:", "\:pancakes:", "\:flan:",
               "\:beers:", "\:tropical_drink:", "\:sake:"];
   
+  if (key.length > 15) {
+    return message.channel.send("**\:no_entry_sign: **`" + key + "`** is too long! " +
+                                "**`<key>`** must be shorter than 15 characters.**");
+  }
   if (client.keywords.has(key)) {
     return message.channel.send("**\:no_entry_sign: I've eaten this already...**");
   }
