@@ -30,7 +30,7 @@ const sendFatEmoji = async (client, message, arg) => {
       console.log("Sent an exploded emote: " + emojiName);
 
       // Super secret pets
-      if (message.author.tag === process.env.SECRET_USER && emojiName === process.env.SECRET_ACTION) {
+      if (message.author.id === process.env.SECRET_USER && emojiName === process.env.SECRET_ACTION) {
         const petResponses = ["no", "satisfied", "ow", "squee"];
         const choice = randomize(petResponses);
         const choiceAttachment = new Discord.Attachment(client.emojis.find(em => em.name === choice).url);
