@@ -1,27 +1,32 @@
 // Post a table of all custom commands associated with a link
-exports.run = (client, message, []) => {
-  var list = "**These are the snacks I've eaten:** \n";
-  list += "`";
+exports.run = (client, message, args) => {
+  let list = "**These are the snacks I've eaten:** \n";
+  const keywords = Array.from(client.keywords.keys());
   
-  var col = 1;
-  const pad = 15; // Length of each "table" column
+  // Alphabetize the keywords
+  if (args.length === 1 || args[1] !== "time") {
+    keywords.sort();
+  }
+  
+  // Create a table of the keywords, ordered column first
+  let col = 1;
+  const padding = 15;
   const numCols = 5;
+  const numRows = Math.ceil(keywords.length/numCols);
+  let table = "";
   
-  Array.from(client.keywords.keys()).forEach(key => {
-    list += key;
-    
-    // Create a table with numCols columns with a length of pad per column
-    if (col < numCols) {
-      if (key.length < pad) {
-        list += " ".repeat(pad-key.length);
-        col += 1
+  for (let i=0; i<numRows; i++) {
+    for (let j=0; j<numCols; j++) {
+      let index = j*numRows + i;
+      
+      // Stop if last keyword will not create a perfect square table
+      if (index >= keywords.length) {
+        break;
       }
+      table += keywords[index] + " ".repeat(padding - keywords[index].length);
     }
-    else {
-      list += "\n";
-      col = 1;
-    }
-  });
-  list += "`";
-  message.channel.send(list);
+    table += "\n";
+  }
+  
+  message.channel.send(list + "`" + table + "`");
 }

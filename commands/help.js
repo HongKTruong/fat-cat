@@ -5,7 +5,7 @@ exports.run = (client, message, []) => {
                          "- `!delete <key1> <key2>...` - to remove link(s) from my memory\n" +
                          "- `!rename <key1> <key2>` - renames a custom keywords from `key1` to `key2`\n" +
                          "- `!edit <key> <new_link>` - replaces the link for an existing command\n" +
-                         "- `!list` - to get a list of all the custom keywords that I know\n" +
+                         "- `!list [time]` - to get a list of all the custom keywords that I know (optional time param orders by time)\n" +
                          "- `!listemojis` - to get a list of all custom emojis that I know\n" +
                          "- `!:customEmote:` - to post a fatter version of the emote\n"); 
 }
