@@ -2,13 +2,14 @@ const util = require("../modules/util.js");
 
 // Adds a custom keyword and its associated link
 exports.run = (client, message, args) => {
-  if (args.length !== 3) {
+  if (args.length < 3) {
     return message.channel.send("**\:interrobang: I don't understand... " + 
                                 "Try** `!add <key> <link>`");
   }
   
-  const key = args[1];
-  const link = args[2];
+  args.shift(); // Remove "add" command
+  const key = args.shift();
+  const link = args.join(" ");
   const food = ["\:ramen:", "\:spaghetti:", "\:stew:", "\:curry:", "\:sushi:",
               "\:bento:", "\:icecream:", "\:cake:", "\:pancakes:", "\:flan:",
               "\:beers:", "\:tropical_drink:", "\:sake:"];
