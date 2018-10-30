@@ -11,7 +11,7 @@ exports.run = (client, message, args) => {
   // Create a table of the keywords, ordered column first
   let col = 1;
   const padding = 15;
-  const numCols = 5;
+  const numCols = 4;
   const numRows = Math.ceil(keywords.length/numCols);
   let table = "";
   
