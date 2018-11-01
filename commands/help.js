@@ -6,6 +6,6 @@ exports.run = (client, message, []) => {
                          "- `!rename <key1> <key2>` - renames a custom keywords from `key1` to `key2`\n" +
                          "- `!edit <key> <new_link>` - replaces the link for an existing command\n" +
                          "- `!list [time]` - to get a list of all the custom keywords that I know (optional time param orders by time)\n" +
-                         "- `!listemojis` - to get a list of all custom emojis that I know\n" +
+                         "- `!listemojis [names]` - to get a list of all custom emojis that I know\n" +
                          "- `!:customEmote:` - to post a fatter version of the emote\n"); 
 }
