@@ -3,9 +3,9 @@ const charLimit = 2000;
 function sendEmojis(client, message) {
   // Store all the emojis in a string separated by space
   var emojiList = client.emojis.map(em => em.toString()).join(" ");
-  
+
   if (emojiList.length <= charLimit) {
-    message.channel.send(emojiList); 
+    message.channel.send(emojiList);
   }
   else {
     // Break the emoji list into multiple messages to avoid the 2000-char limit
@@ -24,7 +24,7 @@ function sendEmojis(client, message) {
 
     // Send the rest of the list
     if (emojiList.length !== 0) {
-      message.channel.send(emojiList); 
+      message.channel.send(emojiList);
     }
   }
 }
@@ -32,7 +32,7 @@ function sendEmojis(client, message) {
 function sendNames(client, message) {
   // Store all the emojis in a string separated by space
   let emojiList = client.emojis.map(em => em.name).sort();
-  
+
   // Create a table of the emoji names, ordered column first
   let col = 1;
   const padding = 16;
@@ -40,16 +40,16 @@ function sendNames(client, message) {
   const numRows = Math.ceil(emojiList.length/numCols);
   let table = "";
   let totalNumChars = charLimit; // Multiplier of charLimit that shows how many messages will be needed
-  
+
   for (let i=0; i<numRows; i++) {
     for (let j=0; j<numCols; j++) {
       let index = j*numRows + i;
-      
+
       // Stop if last keyword will not create a perfect square table
       if (index >= emojiList.length) {
         break;
       }
-      
+
       // Don't start a new row if it'll be cut off by the character limit
       if (table.length + padding*numCols > totalNumChars) {
         table += " ".repeat(totalNumChars - table.length) + "\n";
@@ -59,9 +59,9 @@ function sendNames(client, message) {
     }
     table += "\n";
   }
-  
+
   if (table.length <= charLimit) {
-    message.channel.send("`" + table + "`"); 
+    message.channel.send("`" + table + "`");
   }
   else {
     // Break the emoji list into multiple messages to avoid the 2000-char limit
@@ -73,19 +73,25 @@ function sendNames(client, message) {
 
     // Send the rest of the list
     if (table.length !== 0) {
-      message.channel.send("`" + table + "`"); 
+      message.channel.send("`" + table + "`");
     }
   }
 }
 
 // Post a list of all custom emojis from all guilds Fat Cat is in
-exports.run = (client, message, args) => {
-  const list = "**These are the custom emojis available to me:** \n";
-  
-  if (args.length > 0 && args[1] === "names") {
-    sendNames(client, message);
-  }
-  else {
-    sendEmojis(client, message); 
+module.exports = {
+  command: '!listemojis [names]',
+  shortDescription: 'display a list of all custom emojis.',
+  longDescription: 'You can hover over the emojis to get their names, or type `!listemoji names` to display a table of all custom emoji names.',
+  example: '!listemojis, !listemojis names',
+  run: (client, message, args) => {
+    const list = "**These are the custom emojis available to me:** \n";
+
+    if (args.length > 0 && args[1] === "names") {
+      sendNames(client, message);
+    }
+    else {
+      sendEmojis(client, message);
+    }
   }
 }
