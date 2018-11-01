@@ -82,7 +82,7 @@ function sendNames(client, message) {
 module.exports = {
   command: '!listemojis [names]',
   shortDescription: 'display a list of all custom emojis.',
-  longDescription: 'You can hover over the emojis to get their names, or type `!listemoji names` to display a table of all custom emoji names.',
+  longDescription: 'Display a list of all custom emojis. You can hover over the emojis to get their names, or type `!listemoji names` to display a table of all custom emoji names.',
   example: '!listemojis, !listemojis names',
   run: (client, message, args) => {
     const list = "**These are the custom emojis available to me:** \n";
