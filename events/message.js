@@ -20,7 +20,8 @@ module.exports = (client, message) => {
     // If command doesn't exist, check if it's a custom keyword or emote  
     if (client.keywords.has(command)) {
       console.log("Post link of custom command: " + command);
-      message.channel.send(client.keywords.get(command, "content")); 
+      message.channel.send(client.keywords.get(command, "content"));
+      client.keywords.inc(command, "counter");
     }
     else {
       args.forEach(function(arg) {

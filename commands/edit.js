@@ -15,12 +15,10 @@ module.exports = {
     const guild = (message.guild.available) ? "-1" : message.guild.id;
 
     if (client.keywords.has(key)) {
-      client.keywords.set(key, {
-        server: guild,
-        creator: message.author.id,
-        keyword: key,
-        content: newLink
-      });
+      client.keywords.setProp(key, "server", guild);
+      client.keywords.setProp(key, "creator", message.author.id);
+      client.keywords.setProp(key, "content", newLink);
+      client.keywords.setProp(key, "counter", 0);
       message.channel.send("**\:white_check_mark: **`" + key + "`** has a new link!**");
     }
     else {

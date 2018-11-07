@@ -34,7 +34,8 @@ module.exports = {
       server: guild,
       creator: message.author.id,
       keyword: key,
-      content: link
+      content: link,
+      counter: 0
     });
 
     // Send confirmation with a random food
