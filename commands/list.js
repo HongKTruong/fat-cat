@@ -3,8 +3,8 @@ const charLimit = 2000;
 // Post a table of all custom commands associated with a link
 module.exports = {
   command: '!list [time|usage]',
-  shortDescription: 'display a table of all custom keywords in alphabetical order.',
-  longDescription: 'Display a table of all custom keywords in alphabetical order. Alternatively, order the table from oldest to newest added by typing `!list time`, or by most used to least used by typing `!list usage`',
+  shortDescription: 'display a table of all custom keywords in alphabetical order, order added, or by usage.',
+  longDescription: 'Display a table of all custom keywords in alphabetical order. \nAlternatively, order the table from oldest to newest added by typing `!list time`, or by most used to least used by typing `!list usage`',
   example: '!list, !list time, !list usage',
   run: (client, message, args) => {
     let list = "**These are the snacks I've eaten:** \n";
