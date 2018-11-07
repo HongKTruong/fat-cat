@@ -25,6 +25,7 @@ module.exports = {
     const link = client.keywords.get(oldKey);
     client.keywords.delete(oldKey);
     client.keywords.set(newKey, link);
+    client.keywords.setProp(newKey, newKey, "keyword");
 
     message.channel.send("**\:white_check_mark: Utensils switched out**");
   }
